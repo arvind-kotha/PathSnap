@@ -1,0 +1,182 @@
+[
+  {
+    "trip_id": "00000015",
+    "metrics": {
+      "classifier_top1_accuracy": 0.5436,
+      "decoded_top1_accuracy": 0.7369,
+      "accuracy_gain": 0.1933,
+      "decoded_macro_f1": 0.4125,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.8723,
+      "decoded_route_continuity": 0.9977,
+      "route_continuity": 0.9977,
+      "observations_count": 6854,
+      "decoded_segments_count": 434
+    },
+    "inference_ms": 6031.75,
+    "route_segments": 434,
+    "gps_points_count": 1143
+  },
+  {
+    "trip_id": "00000017",
+    "metrics": {
+      "classifier_top1_accuracy": 0.8551,
+      "decoded_top1_accuracy": 0.8351,
+      "accuracy_gain": -0.0201,
+      "decoded_macro_f1": 0.6678,
+      "candidate_miss_rate": 0.0059,
+      "classifier_route_continuity": 0.6046,
+      "decoded_route_continuity": 0.9568,
+      "route_continuity": 0.9568,
+      "observations_count": 1346,
+      "decoded_segments_count": 695
+    },
+    "inference_ms": 1659.86,
+    "route_segments": 695,
+    "gps_points_count": 1346
+  },
+  {
+    "trip_id": "00000023",
+    "metrics": {
+      "classifier_top1_accuracy": 0.9061,
+      "decoded_top1_accuracy": 0.9345,
+      "accuracy_gain": 0.0284,
+      "decoded_macro_f1": 0.7414,
+      "candidate_miss_rate": 0.0087,
+      "classifier_route_continuity": 0.6786,
+      "decoded_route_continuity": 0.942,
+      "route_continuity": 0.942,
+      "observations_count": 458,
+      "decoded_segments_count": 70
+    },
+    "inference_ms": 573.76,
+    "route_segments": 70,
+    "gps_points_count": 458
+  },
+  {
+    "trip_id": "00000030",
+    "metrics": {
+      "classifier_top1_accuracy": 0.7768,
+      "decoded_top1_accuracy": 0.792,
+      "accuracy_gain": 0.0153,
+      "decoded_macro_f1": 0.5919,
+      "candidate_miss_rate": 0.0046,
+      "classifier_route_continuity": 0.6053,
+      "decoded_route_continuity": 0.9611,
+      "route_continuity": 0.9611,
+      "observations_count": 654,
+      "decoded_segments_count": 284
+    },
+    "inference_ms": 851.57,
+    "route_segments": 284,
+    "gps_points_count": 654
+  },
+  {
+    "trip_id": "00000049",
+    "metrics": {
+      "classifier_top1_accuracy": 0.9603,
+      "decoded_top1_accuracy": 0.9856,
+      "accuracy_gain": 0.0254,
+      "decoded_macro_f1": 0.9374,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.8356,
+      "decoded_route_continuity": 0.9976,
+      "route_continuity": 0.9976,
+      "observations_count": 2642,
+      "decoded_segments_count": 417
+    },
+    "inference_ms": 2736.88,
+    "route_segments": 417,
+    "gps_points_count": 1321
+  },
+  {
+    "trip_id": "00000059",
+    "metrics": {
+      "classifier_top1_accuracy": 0.9059,
+      "decoded_top1_accuracy": 0.8904,
+      "accuracy_gain": -0.0155,
+      "decoded_macro_f1": 0.7057,
+      "candidate_miss_rate": 0.0087,
+      "classifier_route_continuity": 0.6481,
+      "decoded_route_continuity": 0.9633,
+      "route_continuity": 0.9633,
+      "observations_count": 1031,
+      "decoded_segments_count": 410
+    },
+    "inference_ms": 1059.95,
+    "route_segments": 410,
+    "gps_points_count": 1031
+  },
+  {
+    "trip_id": "00000067",
+    "metrics": {
+      "classifier_top1_accuracy": 0.6714,
+      "decoded_top1_accuracy": 0.7697,
+      "accuracy_gain": 0.0983,
+      "decoded_macro_f1": 0.6292,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.8324,
+      "decoded_route_continuity": 1.0,
+      "route_continuity": 1.0,
+      "observations_count": 916,
+      "decoded_segments_count": 91
+    },
+    "inference_ms": 901.79,
+    "route_segments": 91,
+    "gps_points_count": 916
+  },
+  {
+    "trip_id": "00000073",
+    "metrics": {
+      "classifier_top1_accuracy": 0.8916,
+      "decoded_top1_accuracy": 0.9729,
+      "accuracy_gain": 0.0813,
+      "decoded_macro_f1": 0.9069,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.7625,
+      "decoded_route_continuity": 0.9919,
+      "route_continuity": 0.9919,
+      "observations_count": 1144,
+      "decoded_segments_count": 249
+    },
+    "inference_ms": 1125.87,
+    "route_segments": 249,
+    "gps_points_count": 1144
+  },
+  {
+    "trip_id": "00000087",
+    "metrics": {
+      "classifier_top1_accuracy": 0.9178,
+      "decoded_top1_accuracy": 0.9771,
+      "accuracy_gain": 0.0593,
+      "decoded_macro_f1": 0.928,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.6991,
+      "decoded_route_continuity": 1.0,
+      "route_continuity": 1.0,
+      "observations_count": 1399,
+      "decoded_segments_count": 454
+    },
+    "inference_ms": 1703.27,
+    "route_segments": 454,
+    "gps_points_count": 1399
+  },
+  {
+    "trip_id": "00000094",
+    "metrics": {
+      "classifier_top1_accuracy": 0.661,
+      "decoded_top1_accuracy": 0.7799,
+      "accuracy_gain": 0.1189,
+      "decoded_macro_f1": 0.678,
+      "candidate_miss_rate": 0.0,
+      "classifier_route_continuity": 0.7356,
+      "decoded_route_continuity": 0.9954,
+      "route_continuity": 0.9954,
+      "observations_count": 3230,
+      "decoded_segments_count": 652
+    },
+    "inference_ms": 2850.33,
+    "route_segments": 652,
+    "gps_points_count": 1077
+  }
+]
