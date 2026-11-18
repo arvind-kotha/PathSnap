@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathSnap Evaluator Dashboard | Distributed Map-Matching</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>PathSnap <span>Evaluator Console</span></h1>
+          <p class="subtitle">Distributed Map-Matching & Sequential Route Reconstruction | Laptop 2</p>
+        </div>
+      </div>
+
+      <div class="server-config">
+        <div class="input-group">
+          <label for="apiUrl">API Endpoint (Laptop 1):</label>
+          <input type="text" id="apiUrl" value="http://localhost:8000" placeholder="e.g. http://192.168.1.100:8000">
+        </div>
+        <button id="btnConnect" class="btn btn-secondary">
+          <span class="btn-icon">↻</span> Ping API
+        </button>
+        <div id="connectionBadge" class="badge badge-offline">
+          <span class="status-dot"></span> <span id="statusText">Checking...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="main-content">
+      <!-- Left Sidebar: Trips & Controls -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Evaluation Trips</h2>
+          <span class="counter-badge" id="tripCountBadge">10 Reserved Trips</span>
+        </div>
+        <p class="section-desc">Select any reserved evaluation trip to trigger the full prediction pipeline on Laptop 1.</p>
+
+        <div class="trips-container" id="tripsList">
+          <div class="loading-spinner">Loading trips from API...</div>
+        </div>
+
+        <div class="batch-actions">
+          <button id="btnRunAll" class="btn btn-outline" disabled>
+            ⚡ Run Benchmark Across All 10 Trips
+          </button>
+        </div>
+
+        <div class="specs-panel">
+          <h3>System Architecture</h3>
+          <ul>
+            <li><strong>Laptop 1:</strong> FastAPI Server, ML Classifier & HMM Viterbi Decoder</li>
+            <li><strong>Laptop 2:</strong> Evaluator Interface & Interactive Visualization</li>
+            <li><strong>Ground Truth:</strong> Kept strictly server-side for integrity</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Center & Right Area: Map & Metrics -->
+      <main class="dashboard-area">
+        <!-- Active Trip Header -->
+        <div class="trip-banner" id="tripBanner">
+          <div class="banner-info">
+            <div class="active-badge" id="activeTripId">Trip: None Selected</div>
+            <div class="banner-stats" id="bannerStats">
+              <span>Select an evaluation trip on the left to begin inference</span>
+            </div>
+          </div>
+          <div class="banner-actions">
+            <button id="btnRunActive" class="btn btn-primary" disabled>
+              ▶ Run Map-Matching
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="metrics-grid" id="metricsGrid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Decoded Top-1 Accuracy</span>
+              <span class="metric-tag tag-primary">HMM-Viterbi</span>
+            </div>
+            <div class="metric-value" id="valDecodedAcc">--%</div>
+            <div class="metric-sub" id="subRawAcc">Raw Classifier: --%</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Route Continuity</span>
+              <span class="metric-tag tag-success">Topology</span>
+            </div>
+            <div class="metric-value" id="valContinuity">--%</div>
+            <div class="metric-sub" id="subContinuity">Graph segment connectivity</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Macro F1-Score</span>
+              <span class="metric-tag tag-info">Sequence</span>
+            </div>
+            <div class="metric-value" id="valMacroF1">--%</div>
+            <div class="metric-sub">Multi-class route macro F1</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Candidate Miss Rate</span>
+              <span class="metric-tag tag-warning">Spatial Index</span>
+            </div>
+            <div class="metric-value" id="valMissRate">--%</div>
+            <div class="metric-sub">Spatial k-d tree candidate recall</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Inference Latency</span>
+              <span class="metric-tag tag-secondary">Performance</span>
+            </div>
+            <div class="metric-value" id="valLatency">-- ms</div>
+            <div class="metric-sub" id="subFixCount">Processing speed</div>
+          </div>
+        </div>
+
+        <!-- Interactive Map Container -->
+        <div class="map-card">
+          <div class="map-card-header">
+            <div class="map-title-group">
+              <h3>Geographical Map Visualization</h3>
+              <span class="map-subtitle">Esri World Street Map layer with synchronized trajectory layers</span>
+            </div>
+            <div class="map-controls">
+              <label class="toggle-control">
+                <input type="checkbox" id="toggleGps" checked>
+                <span>GPS Observations (Blue)</span>
+              </label>
+              <label class="toggle-control">
+                <input type="checkbox" id="toggleRoute" checked>
+                <span>Matched Route (Green)</span>
+              </label>
+              <button id="btnFitMap" class="btn btn-sm btn-secondary">Zoom to Bounds</button>
+            </div>
+          </div>
+          <div id="map"></div>
+          <div class="map-legend">
+            <div class="legend-item"><span class="legend-circle bg-blue"></span> Raw GPS Observations</div>
+            <div class="legend-item"><span class="legend-line bg-green"></span> Reconstructed Vehicle Route</div>
+            <div class="legend-item"><span class="legend-marker bg-start"></span> Trip Start</div>
+            <div class="legend-item"><span class="legend-marker bg-end"></span> Trip End</div>
+          </div>
+        </div>
+
+        <!-- Detailed Results & Inspector Tabs -->
+        <div class="details-panel">
+          <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="tabComparison">Pipeline Comparison</button>
+            <button class="tab-btn" data-tab="tabJson">Raw API Response JSON</button>
+            <button class="tab-btn" data-tab="tabSummary">Batch Benchmark Table</button>
+          </div>
+
+          <div class="tab-content active" id="tabComparison">
+            <div class="comparison-container">
+              <div class="comparison-column">
+                <h4>Raw Classifier Predictions (Pointwise Top-1)</h4>
+                <div class="comparison-stat-row">
+                  <span>Accuracy:</span> <strong id="compRawAcc">--</strong>
+                </div>
+                <div class="comparison-stat-row">
+                  <span>Reconstructed Route Segments:</span> <strong id="compRawSegments">--</strong>
+                </div>
+                <div class="comparison-stat-row">
+                  <span>Topological Continuity:</span> <strong id="compRawCont">--</strong>
+                </div>
+                <p class="comp-desc">Evaluates each candidate road segment independently based strictly on spatial and kinematics features without sequential transition constraints.</p>
+              </div>
+
+              <div class="comparison-divider"></div>
+
+              <div class="comparison-column highlight">
+                <h4>HMM + Viterbi Decoded Route (Sequential Map-Matching)</h4>
+                <div class="comparison-stat-row">
+                  <span>Accuracy:</span> <strong id="compDecAcc" class="text-success">--</strong>
+                </div>
+                <div class="comparison-stat-row">
+                  <span>Reconstructed Route Segments:</span> <strong id="compDecSegments" class="text-success">--</strong>
+                </div>
+                <div class="comparison-stat-row">
+                  <span>Topological Continuity:</span> <strong id="compDecCont" class="text-success">--</strong>
+                </div>
+                <p class="comp-desc">Integrates road-network graph topology, emission likelihoods, and transition probabilities with long GPS gap handling to reconstruct a realistic, physically plausible route.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tabJson">
+            <pre class="json-viewer" id="jsonViewer">// Select a trip and run prediction to view raw API payload</pre>
+          </div>
+
+          <div class="tab-content" id="tabSummary">
+            <div class="table-responsive">
+              <table class="benchmark-table" id="benchmarkTable">
+                <thead>
+                  <tr>
+                    <th>Trip ID</th>
+                    <th>Observations</th>
+                    <th>Raw Top-1 Acc</th>
+                    <th>Decoded Acc</th>
+                    <th>Accuracy Gain</th>
+                    <th>Macro F1</th>
+                    <th>Route Continuity</th>
+                    <th>Inference Time</th>
+                  </tr>
+                </thead>
+                <tbody id="benchmarkBody">
+                  <tr><td colspan="8" class="text-center">Click "Run Benchmark Across All 10 Trips" to execute batch evaluation.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
